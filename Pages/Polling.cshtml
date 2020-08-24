@@ -1,0 +1,19 @@
+﻿@page
+@model PrivacyModel
+@{
+    ViewData["Title"] = "Polling Demo";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>This page demo the polling functionality.</p>
+
+<p>Click submit to see how states are being refreshed!</p>
+
+<form>
+    <button id="submit" type="submit" class="btn btn-primary">
+        Submit
+    </button>
+    <div id="status"></div>
+</form>
+
+<script src="/js/poll.js"></script>
