@@ -1,9 +1,9 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
-using SignalRChat.Helpers;
-using SignalRChat.Models;
+using SignalRDemo.Helpers;
+using SignalRDemo.Models;
 
-namespace SignalRChat.Controllers
+namespace SignalRDemo.Controllers
 {
     [Route("api/[controller]")]
     public class PollController : Controller

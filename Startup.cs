@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SignalRChat.Hubs;
+using SignalRDemo.Hubs;
 
-namespace SignalRChat
+namespace SignalRDemo
 {
     public class Startup
     {

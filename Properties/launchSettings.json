@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SignalRChat": {
+    "SignalRDemo": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5001",

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using SignalRChat.Models;
+using SignalRDemo.Models;
 
-namespace SignalRChat.Helpers
+namespace SignalRDemo.Helpers
 {
     public class OrderChecker
     {

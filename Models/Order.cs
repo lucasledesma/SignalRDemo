@@ -1,4 +1,4 @@
-namespace SignalRChat.Models
+namespace SignalRDemo.Models
 {
     public class Order
     {
