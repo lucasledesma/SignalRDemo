@@ -1,6 +1,11 @@
-# SignalRDemo
-SignalRDemo
+# Real Time Web
 
-In this project you can fine the different ways o get real time (or near real time) updates.
+In this project you can find different ways to get real time (or near real time) updates in the browser.
 
-I demo how to use polling, long polling, server sent events and signalR. 
+I demo the following mechanisms:
+
+* Polling
+* Long Polling
+* Server Sent Events
+* Websockets 
+* SignalR 
