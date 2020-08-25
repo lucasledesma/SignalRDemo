@@ -16,6 +16,7 @@ poll = (orderId) => {
 
 document.getElementById("submit").addEventListener("click", e => {
     e.preventDefault();
+    const statusDiv = document.getElementById("status").innerHTML="Starting...";
     fetch("/api/Poll",
         {
             method: "POST",

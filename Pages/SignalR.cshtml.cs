@@ -8,11 +8,11 @@ using Microsoft.Extensions.Logging;
 
 namespace SignalRDemo.Pages
 {
-    public class Polling : PageModel
+    public class SignalRModel : PageModel
     {
-        private readonly ILogger<PrivacyModel> _logger;
+        private readonly ILogger<SignalRModel> _logger;
 
-        public Polling(ILogger<PrivacyModel> logger)
+        public SignalRModel(ILogger<SignalRModel> logger)
         {
             _logger = logger;
         }

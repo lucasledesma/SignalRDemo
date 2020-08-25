@@ -1,20 +1,20 @@
 ﻿@page
-@model PollingModel
+@model WebSocketsModel
 @{
-    ViewData["Title"] = "Polling Demo";
+    ViewData["Title"] = "WebSockets Demo";
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>This page demo the polling functionality.</p>
+<p>This page demo the websockets functionality.</p>
 
 <p>Click submit to see how states are being refreshed!</p>
 
 <form>
     <button id="submit" type="submit" class="btn btn-primary">
-        Try Polling!
+        Try Websockets!
     </button>
     <br>
     <div id="status"></div>
 </form>
 
-<script src="/js/poll.js"></script>
+<script src="/js/websockets.js"></script>

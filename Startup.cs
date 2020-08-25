@@ -26,7 +26,7 @@ namespace SignalRDemo
         {
             services.AddRazorPages();
             services.AddSignalR();
-
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +43,14 @@ namespace SignalRDemo
                 app.UseHsts();
             }
 
+            var webSocketsOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(120),
+                ReceiveBufferSize= 4*1024
+            };
+
+            app.UseWebSockets(webSocketsOptions);
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -53,7 +61,7 @@ namespace SignalRDemo
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                endpoints.MapHub<ChatHub>("/chathub");
+                endpoints.MapHub<SignalRHub>("/signalrhub");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

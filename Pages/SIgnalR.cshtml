@@ -1,0 +1,23 @@
+﻿@page
+@model SignalRModel
+@{
+    ViewData["Title"] = "SignalR Demo";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>This page demo the signalr functionality.</p>
+
+<p>Click submit to see how states are being refreshed!</p>
+
+<form>
+    <button id="submit" type="submit" class="btn btn-primary">
+        Try SignalR!
+    </button>
+    <br>
+    <div id="status"></div>
+</form>
+
+<script src="/js/signalr.js"></script>
+<script src="/js/signalr/dist/browser/signalr.js"></script>
+<script src="/js/signalr/dist/browser/signalr.min.js"></script>
+

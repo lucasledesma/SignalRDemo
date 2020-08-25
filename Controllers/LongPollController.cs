@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Microsoft.AspNetCore.Mvc;
 using SignalRDemo.Helpers;
 using SignalRDemo.Models;
@@ -6,7 +7,7 @@ using SignalRDemo.Models;
 namespace SignalRDemo.Controllers
 {
     [Route("api/[controller]")]
-    public class PollController : Controller
+    public class LongPollController : Controller
     {
         private static readonly StateChecker _stateChecker =
                    new StateChecker(new Random());
@@ -22,7 +23,18 @@ namespace SignalRDemo.Controllers
         {
             var item = new Item();
             item.Id = itemNo;
-            var result = _stateChecker.GetUpdate(item);
+
+            UpdateInfo result;
+
+            int i = 0;
+            do
+            {
+                result = _stateChecker.GetUpdate(item);
+                Thread.Sleep(3000);
+                i++;
+
+            } while (!result.New && i < 3);
+
             if (result.New)
                 return new ObjectResult(result);
             return NoContent();
