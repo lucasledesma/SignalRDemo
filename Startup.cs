@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SignalRDemo.Hubs;
+using SignalRDemo.Helpers;
 
 namespace SignalRDemo
 {
@@ -25,8 +26,13 @@ namespace SignalRDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddSignalR();
+            services.AddSignalR(o => 
+            {
+                o.EnableDetailedErrors = true;
+            });
             services.AddHttpContextAccessor();
+            services.AddSingleton<StateChecker, StateChecker>();
+            services.AddSingleton<Random, Random>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,7 +52,7 @@ namespace SignalRDemo
             var webSocketsOptions = new WebSocketOptions()
             {
                 KeepAliveInterval = TimeSpan.FromSeconds(120),
-                ReceiveBufferSize= 4*1024
+                ReceiveBufferSize = 4 * 1024
             };
 
             app.UseWebSockets(webSocketsOptions);

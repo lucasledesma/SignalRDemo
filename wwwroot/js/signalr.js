@@ -1,21 +1,36 @@
-listen = (itemId) => {
-    const socket = new WebSocket(`wss://localhost:5001/api/WebSockets/${itemId}`);
+setupConnection = () => {
+    connection = new signalR.HubConnectionBuilder()
+        .withUrl("/signalrhub")
+        .build();
 
-    socket.onmessage = (event) => {
-        const statusDiv = document.getElementById("status");                    
-        statusDiv.innerHTML = event.data;
-        if (event.data == 'Done!') socket.close();
-    }
-}
+    connection.on("ReceiveItemUpdate", (update) => {
+        const statusDiv = document.getElementById("status");
+        statusDiv.innerHTML = update;
+    });
+
+    connection.on("NewItemFromOthers", (item) => {
+        const statusDiv = document.getElementById("status");
+        statusDiv.innerHTML = "Someone else created item " + item.id;
+    });
+
+    connection.on("NewItemFromMe", (item) => {
+        const statusDiv = document.getElementById("status");
+        statusDiv.innerHTML = "Starting item " + item.id + " waiting for server updates...";        
+        connection.invoke("GetUpdateForItem",parseInt(item.id))
+    });
+
+
+    connection.on("Finished", () => {
+        //    connection.stop();
+    });
+
+    connection.start()
+        .catch(err => console.error(err.toString()));
+};
+
+setupConnection();
 
 document.getElementById("submit").addEventListener("click", e => {
     e.preventDefault();
-    const statusDiv = document.getElementById("status").innerHTML = "Starting...";
-    fetch("/api/WebSockets",
-        {
-            method: "POST",
-            body: {}
-        })
-        .then(response => response.text())
-        .then(text => listen(text));
-})  
+    connection.invoke("NewItem");
+});

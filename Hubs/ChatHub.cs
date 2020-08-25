@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using SignalRDemo.Helpers;
 using SignalRDemo.Models;
 using System.Threading;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SignalRDemo.Hubs
 {
@@ -40,5 +41,12 @@ namespace SignalRDemo.Hubs
             await Clients.All.SendAsync("NewClientConnected");
         }
 
+        public async Task NewItem()
+        {
+            Item item = new Item();
+            item.Id = _stateChecker.GetNewItem();
+            await Clients.Caller.SendAsync("NewItemFromMe", item);
+            await Clients.Others.SendAsync("NewItemFromOthers", item);
+        }
     }
 }
