@@ -9,3 +9,5 @@ I demo the following mechanisms:
 * Server Sent Events
 * Websockets 
 * SignalR 
+
+This project creates a web application that host a SignalR hub and a a website with pages that allow testing the different real time updates mechanisms from the browser.
