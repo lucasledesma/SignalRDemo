@@ -1,39 +1,56 @@
 using System;
-using Zeebe.Client;
+using System.Threading;
+using System.Net.Http;
+using Microsoft.AspNetCore.SignalR.Client;
 using Zeebe.Client.Api.Responses;
 using Zeebe.Client.Api.Worker;
+using Newtonsoft.Json;
+
 
 namespace ZeebeClientExample.Handlers
 {
     class Handler1
     {
-        public static void HandleJob(IJobClient jobClient, IJob job)
+
+        class WorkflowData
+        {
+            public string workflowid ;
+            public string connectionid;
+            public string stepDone;
+        }
+        public async void HandleJob(IJobClient jobClient, IJob job)
         {
             // business logic
             var jobKey = job.Key;
             Console.WriteLine("Handling job: " + job);
 
-            //            if (jobKey % 3 == 0)
-            //            {
+            Thread.Sleep(3000);
+
+            var connection = new HubConnectionBuilder()
+                           .WithUrl("https://localhost:5001/signalrhub", (opts) =>
+                               {
+                                   opts.HttpMessageHandlerFactory = (message) =>
+                                   {
+                                       if (message is HttpClientHandler clientHandler)
+                                           // bypass SSL certificate
+                                           clientHandler.ServerCertificateCustomValidationCallback +=
+                                           (sender, certificate, chain, sslPolicyErrors) => { return true; };
+                                       return message;
+                                   };
+                               })
+                           .Build();
+
+            await connection.StartAsync();
+
+            WorkflowData variables = JsonConvert.DeserializeObject<WorkflowData>(job.Variables);
+
+            await connection.InvokeCoreAsync("WorkflowStepDone", typeof(void), new object[] { job.WorkflowInstanceKey.ToString(), variables.connectionid, job.Type.ToString() });
+
             jobClient.NewCompleteJobCommand(jobKey)
-                .Variables("{\"foo\":2}")
+                .Variables("")
                 .Send()
                 .GetAwaiter()
                 .GetResult();
-            //}
-            // else if (jobKey % 2 == 0)
-            // {
-            //     jobClient.NewFailCommand(jobKey)
-            //         .Retries(job.Retries - 1)
-            //         .ErrorMessage("Example fail")
-            //         .Send()
-            //         .GetAwaiter()
-            //         .GetResult();
-            // }
-            // else
-            // {
-            //     // auto completion
-            // }
         }
     }
 

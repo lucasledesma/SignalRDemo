@@ -3,7 +3,7 @@ setupConnection = () => {
         .withUrl("/signalrhub")
         .build();
 
-    connection.on("ReceiveItemUpdate", (update) => {
+    connection.on("WorkflowStepDone", (update) => {
         const statusDiv = document.getElementById("status");
         statusDiv.innerHTML = update;
     });
@@ -11,6 +11,11 @@ setupConnection = () => {
     connection.on("NewWorkflowFromMe", (item) => {
         const statusDiv = document.getElementById("status");
         statusDiv.innerHTML = "Starting a new workflow for item " + item.id + "...";        
+    });
+
+    connection.on("NewWorkflowFromOthers", (item) => {
+        const statusDiv = document.getElementById("status");
+        statusDiv.innerHTML = "Someone else started a workflow...";        
     });
 
     connection.start()

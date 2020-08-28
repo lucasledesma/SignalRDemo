@@ -66,13 +66,17 @@ namespace WebApp.Hubs
                      .NewCreateWorkflowInstanceCommand()
                      .BpmnProcessId("signalrdemo")
                      .LatestVersion()
-                     .Variables("")
+                     .Variables("{\"connectionid\":\""+ Context.ConnectionId + "\"}")
                      .Send();
 
-            await Clients.Caller.SendAsync("NewItemFromMe", item);
-            await Clients.Others.SendAsync("NewItemFromOthers", item);
+            await Clients.Caller.SendAsync("NewWorkflowFromMe", item);
+            await Clients.Others.SendAsync("NewWorkflowFromOthers", item);
         }
 
+        public async Task WorkflowStepDone(string workflowid, string connectionid, string stepDone)
+        {
+            await Clients.Client(connectionid).SendAsync("WorkflowStepDone",stepDone);
+        }
 
     }
 }

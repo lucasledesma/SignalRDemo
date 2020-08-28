@@ -16,7 +16,7 @@ namespace ZeebeClientExample.Main
         private static readonly string ZeebeUrl = "localhost:26500";
         private static readonly string WorkflowInstanceVariables = "{\"a\":\"123\"}";
         private static readonly string WorkerName = Environment.MachineName;
-        private static readonly long WorkCount = 1L;
+        private static readonly long WorkCount = 0L;
 
         public static async Task Main(string[] args)
         {
@@ -44,41 +44,24 @@ namespace ZeebeClientExample.Main
                     .Send();
             }
 
+            string[] states = { "State1", "State2", "State3", "Done" };
+
             // open job worker
             using (var signal = new EventWaitHandle(false, EventResetMode.AutoReset))
             {
 
-                client.NewWorker()
-                      .JobType("State1")
-                      .Handler(Handler1.HandleJob)
-                      .MaxJobsActive(4)
-                      .Name(WorkerName + "1")
-                      .AutoCompletion()
-                      .PollInterval(TimeSpan.FromSeconds(1))
-                      .Timeout(TimeSpan.FromSeconds(10))
-                      .Open();
-
-                client.NewWorker()
-                      .JobType("State2")
-                      .Handler(Handler2.HandleJob)
-                      .MaxJobsActive(4)
-                      .Name(WorkerName + "2")
-                      .AutoCompletion()
-                      .PollInterval(TimeSpan.FromSeconds(1))
-                      .Timeout(TimeSpan.FromSeconds(10))
-                      .Open();
-
-
-                client.NewWorker()
-                      .JobType("State3")
-                      .Handler(Handler3.HandleJob)
-                      .MaxJobsActive(4)
-                      .Name(WorkerName + "3")
-                      .AutoCompletion()
-                      .PollInterval(TimeSpan.FromSeconds(1))
-                      .Timeout(TimeSpan.FromSeconds(10))
-                      .Open();
-
+                int i=0;
+                foreach (string workflowState in states)
+                {
+                    client.NewWorker()
+                          .JobType(workflowState)
+                          .Handler(new Handler1().HandleJob)
+                          .MaxJobsActive(1)
+                          .Name(WorkerName + i++)
+                          .PollInterval(TimeSpan.FromSeconds(1))
+                          .Timeout(TimeSpan.FromSeconds(10))
+                          .Open();
+                }
 
                 // blocks main thread, so that worker can run
                 signal.WaitOne();
