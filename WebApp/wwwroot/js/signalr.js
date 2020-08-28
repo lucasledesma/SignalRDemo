@@ -1,4 +1,4 @@
-// WebSocket = undefined;
+ WebSocket = undefined;
 // EventSource = undefined;
 
 setupConnection = () => {
