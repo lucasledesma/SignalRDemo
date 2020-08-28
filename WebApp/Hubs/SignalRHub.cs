@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using WebApp.Helpers;
 using WebApp.Models;
 using System.Threading;
-using Microsoft.AspNetCore.Mvc;
+using NLog.Extensions.Logging;
+using Zeebe.Client;
+using Zeebe.Client.Api.Responses;
 
 namespace WebApp.Hubs
 {
@@ -48,5 +50,29 @@ namespace WebApp.Hubs
             await Clients.Caller.SendAsync("NewItemFromMe", item);
             await Clients.Others.SendAsync("NewItemFromOthers", item);
         }
+
+        public async Task NewWorkflowInstance()
+        {
+            Item item = new Item();
+            item.Id = _stateChecker.GetNewItem();
+
+            var client = ZeebeClient.Builder()
+                .UseLoggerFactory(new NLogLoggerFactory())
+                .UseGatewayAddress("localhost:26500")
+                .UsePlainText()
+                .Build();
+
+            await client
+                     .NewCreateWorkflowInstanceCommand()
+                     .BpmnProcessId("signalrdemo")
+                     .LatestVersion()
+                     .Variables("")
+                     .Send();
+
+            await Clients.Caller.SendAsync("NewItemFromMe", item);
+            await Clients.Others.SendAsync("NewItemFromOthers", item);
+        }
+
+
     }
 }
