@@ -1,5 +1,7 @@
 # Real Time Web 
 
+[![lucasledesma](https://circleci.com/gh/lucasledesma/SignalRDemo.svg?style=svg)](https://app.circleci.com/pipelines/github/lucasledesma/SignalRDemo)
+
 In this repository you can find different ways to get real time (or near real time) updates in the browser.
 
 I demonstrate the following mechanisms:
